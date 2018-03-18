@@ -104,6 +104,7 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
 	private EditText mSearchEditText;
 	private AtomicBoolean mRequestedContactsPermission = new AtomicBoolean(false);
 	private boolean mHideOfflineContacts = false;
+	private String previousQuery = null;
 	private MenuItem.OnActionExpandListener mOnActionExpandListener = new MenuItem.OnActionExpandListener() {
 
 		@Override
@@ -517,8 +518,7 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
 		MenuItem menuHideOffline = menu.findItem(R.id.action_hide_offline);
 		MenuItem joinGroupChat = menu.findItem(R.id.action_join_conference);
 		MenuItem qrCodeScanMenuItem = menu.findItem(R.id.action_scan_qr_code);
-		ActionBar bar = getSupportActionBar();
-		joinGroupChat.setVisible(bar != null && binding.startConversationViewPager.getCurrentItem() == 1);
+		joinGroupChat.setVisible(binding.startConversationViewPager.getCurrentItem() == 1);
 		qrCodeScanMenuItem.setVisible(isCameraFeatureAvailable());
 		menuHideOffline.setChecked(this.mHideOfflineContacts);
 		mMenuSearchView = menu.findItem(R.id.action_search);
@@ -531,6 +531,12 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
 			mMenuSearchView.expandActionView();
 			mSearchEditText.append(mInitialJid);
 			filter(mInitialJid);
+		}
+		if (previousQuery != null) {
+			mMenuSearchView.expandActionView();
+			mSearchEditText.append(previousQuery);
+			filter(previousQuery);
+			previousQuery = null;
 		}
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -857,6 +863,9 @@ public class StartConversationActivity extends XmppActivity implements OnRosterU
 			fabDrawable = R.drawable.ic_group_add_white_24dp;
 		}
 		binding.fab.setImageResource(fabDrawable);
+		if (mMenuSearchView != null && mMenuSearchView.isActionViewExpanded()) {
+			previousQuery = mSearchEditText.getText().toString();
+		}
 		invalidateOptionsMenu();
 	}
 
