@@ -142,6 +142,7 @@ public class ConversationFragment extends XmppFragment implements EditMessage.Ke
 	private Toast messageLoaderToast;
 	private ConversationsActivity activity;
 	private boolean reInitRequiredOnStart = true;
+	int count = 0;
 	private OnClickListener clickToMuc = new OnClickListener() {
 
 		@Override
@@ -1993,6 +1994,7 @@ public class ConversationFragment extends XmppFragment implements EditMessage.Ke
 		synchronized (this.messageList) {
 			if (this.conversation != null) {
 				conversation.populateWithMessages(this.messageList);
+				conversation.getLatestMessage().getUuid();
 				updateSnackBar(conversation);
 				updateStatusMessages();
 				this.messageListAdapter.notifyDataSetChanged();

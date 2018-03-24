@@ -292,7 +292,7 @@ public class Patterns {
             = Pattern.compile("(" + HOST_NAME + "|" + IP_ADDRESS + ")");
     private static final String PROTOCOL = "(?i:http|https|rtsp):\\/\\/";
     /* A word boundary or end of input.  This is to stop foo.sure from matching as foo.su */
-    private static final String WORD_BOUNDARY = "(?:\\b|$|^)";
+    private static final String WORD_BOUNDARY = "(?:\b|\\s|$|^)";
     private static final String USER_INFO = "(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)"
             + "\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_"
             + "\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@";
@@ -370,7 +370,8 @@ public class Patterns {
      * @hide
      */
     public static final Pattern AUTOLINK_WEB_URL = Pattern.compile(
-            "(" + WEB_URL_WITH_PROTOCOL + "|" + WEB_URL_WITHOUT_PROTOCOL + ")");
+            "(" + WEB_URL_WITH_PROTOCOL + "|" + WEB_URL_WITHOUT_PROTOCOL + ")",
+                    Pattern.MULTILINE);
     /**
      * Regular expression for valid email characters. Does not include some of the valid characters
      * defined in RFC5321: #&~!^`{}/=$*?|
