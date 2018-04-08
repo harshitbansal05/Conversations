@@ -404,6 +404,7 @@
 	<string name="conference_options">Group chat options</string>
 	<string name="members_only">Private, members only</string>
 	<string name="non_anonymous">Non-anonymous</string>
+	<string name="password_protected">Password protected</string>
 	<string name="moderated">Moderated</string>
 	<string name="you_are_not_participating">You are not participating</string>
 	<string name="modified_conference_options">Modified group chat options!</string>

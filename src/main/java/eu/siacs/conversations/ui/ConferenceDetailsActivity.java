@@ -26,6 +26,7 @@ import org.openintents.openpgp.util.OpenPgpUtils;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -131,12 +132,14 @@ public class ConferenceDetailsActivity extends XmppActivity implements OnConvers
 				options = new String[]{
 						getString(R.string.members_only),
 						getString(R.string.moderated),
-						getString(R.string.non_anonymous)
+						getString(R.string.non_anonymous),
+						getString(R.string.password_protected)
 				};
 				values = new boolean[]{
 						mucOptions.membersOnly(),
 						mucOptions.moderated(),
-						mucOptions.nonanonymous()
+						mucOptions.nonanonymous(),
+						mucOptions.passwordProtected()
 				};
 			} else {
 				options = new String[]{
@@ -160,9 +163,40 @@ public class ConferenceDetailsActivity extends XmppActivity implements OnConvers
 				options1.putString("muc#roomconfig_membersonly", values[0] ? "1" : "0");
 				if (values.length == 2) {
 					options1.putString("muc#roomconfig_whois", values[1] ? "anyone" : "moderators");
-				} else if (values.length == 3) {
+					options1.putString("muc#roomconfig_passwordprotectedroom", "0");
+				} else if (values.length == 4 && !mucOptions.passwordProtected() && values[3]) {
+					quickPasswordEdit("", value -> {
+						options1.putString("muc#roomconfig_moderatedroom", values[1] ? "1" : "0");
+						options1.putString("muc#roomconfig_whois", values[2] ? "anyone" : "moderators");
+						options1.putString("muc#roomconfig_passwordprotectedroom", values[3] ? "1" : "0");
+						options1.putString("muc#roomconfig_roomsecret", value);
+						options1.putString("muc#roomconfig_persistentroom", "1");
+						xmppConnectionService.pushConferenceConfiguration(mConversation, options1, new XmppConnectionService.OnConfigurationPushed() {
+							@Override
+							public void onPushSucceeded() {
+								Account account = mConversation.getAccount();
+								List<Jid> jids = mConversation.getMucOptions().getMembers();
+								for (Jid invite : jids) {
+									xmppConnectionService.invite(mConversation, invite);
+								}
+								if (account.countPresences() > 1) {
+									xmppConnectionService.directInvite(mConversation, account.getJid().asBareJid());
+								}
+								displayToast(getString(R.string.modified_conference_options));
+							}
+
+							@Override
+							public void onPushFailed() {
+								displayToast(getString(R.string.could_not_modify_conference_options));
+							}
+						});
+						return null;
+					});
+					return;
+				} else if (values.length == 4) {
 					options1.putString("muc#roomconfig_moderatedroom", values[1] ? "1" : "0");
 					options1.putString("muc#roomconfig_whois", values[2] ? "anyone" : "moderators");
+					options1.putString("muc#roomconfig_passwordprotectedroom", values[3] ? "1" : "0");
 				}
 				options1.putString("muc#roomconfig_persistentroom", "1");
 				xmppConnectionService.pushConferenceConfiguration(mConversation,

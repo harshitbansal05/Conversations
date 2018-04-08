@@ -382,6 +382,7 @@ public class MucOptions {
 		changed |= conversation.setAttribute(Conversation.ATTRIBUTE_MEMBERS_ONLY, this.hasFeature("muc_membersonly"));
 		changed |= conversation.setAttribute(Conversation.ATTRIBUTE_MODERATED, this.hasFeature("muc_moderated"));
 		changed |= conversation.setAttribute(Conversation.ATTRIBUTE_NON_ANONYMOUS, this.hasFeature("muc_nonanonymous"));
+		changed |= conversation.setAttribute(Conversation.ATTRIBUTE_PASSWORD_PROTECTED, this.hasFeature("muc_passwordprotected"));
 		return changed;
 	}
 
@@ -440,6 +441,10 @@ public class MucOptions {
 
 	public boolean moderated() {
 		return conversation.getBooleanAttribute(Conversation.ATTRIBUTE_MODERATED, false);
+	}
+
+	public boolean passwordProtected() {
+		return conversation.getBooleanAttribute(Conversation.ATTRIBUTE_PASSWORD_PROTECTED, false);
 	}
 
 	public User deleteUser(Jid jid) {

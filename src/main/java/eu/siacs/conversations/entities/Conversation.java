@@ -59,6 +59,7 @@ public class Conversation extends AbstractEntity implements Blockable, Comparabl
 	public static final String ATTRIBUTE_ALLOW_PM = "allow_pm";
 	public static final String ATTRIBUTE_MEMBERS_ONLY = "members_only";
 	public static final String ATTRIBUTE_MODERATED = "moderated";
+	public static final String ATTRIBUTE_PASSWORD_PROTECTED = "password_protected";
 	public static final String ATTRIBUTE_NON_ANONYMOUS = "non_anonymous";
 	protected final ArrayList<Message> messages = new ArrayList<>();
 	public AtomicBoolean messagesLoaded = new AtomicBoolean(true);
