@@ -2744,10 +2744,11 @@ public class ConversationFragment extends XmppFragment implements EditMessage.Ke
 
 	@Override
 	public void onRemoveWallpaperClicked() {
-		activity.xmppConnectionService.getFileBackend().removeConversationWallpaper(conversation.getUuid());
-		conversation.setHasWallpaper(false);
-		activity.xmppConnectionService.updateConversation(conversation);
-		activity.invalidateOptionsMenu();
-		loadWallpaper();
+//		activity.xmppConnectionService.getFileBackend().removeConversationWallpaper(conversation.getUuid());
+//		conversation.setHasWallpaper(false);
+//		activity.xmppConnectionService.updateConversation(conversation);
+//		activity.invalidateOptionsMenu();
+//		loadWallpaper();
+		startActivityForResult(new Intent(activity, SolidColorActivity.class), 9);
 	}
 }
