@@ -7,27 +7,46 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.databinding.ActivitySolidColorBinding;
 import eu.siacs.conversations.ui.adapter.SolidColorAdapter;
+import eu.siacs.conversations.ui.util.SolidColorItemDecoration;
+
+import static eu.siacs.conversations.ui.XmppActivity.configureActionBar;
 
 public class SolidColorActivity extends AppCompatActivity implements SolidColorAdapter.OnSolidColorSelected {
 
-    private final int NUM_COLUMNS = 3;
+    private final int COLUMN_WIDTH = 120;
     private RecyclerView solidColorRecyclerView;
     private SolidColorAdapter solidColorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_solid_color);
-        ActivitySolidColorBinding binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.activity_solid_color, null, false);
+        ActivitySolidColorBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_solid_color);
+        setSupportActionBar(binding.toolbar);
+        configureActionBar(getSupportActionBar());
         solidColorRecyclerView = binding.solidColorRecyclerView;
         solidColorRecyclerView.setHasFixedSize(true);
-        solidColorRecyclerView.setLayoutManager(new GridLayoutManager(this, NUM_COLUMNS));
+        solidColorRecyclerView.setLayoutManager(new GridLayoutManager(this, getSpanCount()));
+        solidColorRecyclerView.addItemDecoration(new SolidColorItemDecoration(getSpacing(), getSpanCount()));
         solidColorAdapter = new SolidColorAdapter(this, getSolidColorList());
         solidColorRecyclerView.setAdapter(solidColorAdapter);
+    }
+
+    private int getSpacing() {
+        int spanCount = getSpanCount();
+        return (getResources().getDisplayMetrics().widthPixels - spanCount * dpToPx(COLUMN_WIDTH)) / (spanCount + 1);
+    }
+
+    private int getSpanCount() {
+        return getResources().getDisplayMetrics().widthPixels / dpToPx(COLUMN_WIDTH);
+    }
+
+    private int dpToPx(int i) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, i, getResources().getDisplayMetrics());
     }
 
     private int[] getSolidColorList() {
@@ -43,7 +62,7 @@ public class SolidColorActivity extends AppCompatActivity implements SolidColorA
     public void onSolidColorSelected(int color) {
         Intent intent = new Intent(this, ConversationsActivity.class);
         intent.putExtra("color", color);
-        startActivity(intent);
+        setResult(RESULT_OK, intent);
         finish();
     }
 }

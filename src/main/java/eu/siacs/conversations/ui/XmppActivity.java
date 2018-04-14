@@ -444,6 +444,23 @@ public abstract class XmppActivity extends AppCompatActivity {
 		return res;
 	}
 
+	public int[] getChatWallpaperDimensions() {
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+		int height = displayMetrics.heightPixels - getActionBarSize();
+		int width = displayMetrics.widthPixels;
+		return new int[]{width, height};
+	}
+
+	private int getActionBarSize() {
+		int[] actionBarSizeAttr = new int[] {R.attr.actionBarSize};
+		int indexOfAttrActionBarSize = 0;
+		TypedArray typedArray = this.getTheme().obtainStyledAttributes(actionBarSizeAttr);
+		int actionBarSize = typedArray.getDimensionPixelSize(indexOfAttrActionBarSize, -1);
+		typedArray.recycle();
+		return actionBarSize;
+	}
+
 	protected boolean isOptimizingBattery() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			final PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);

@@ -231,6 +231,9 @@
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.SolidColorActivity"
+            android:label="@string/solid_color"/>
     </application>
 
 </manifest>

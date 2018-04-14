@@ -28,12 +28,9 @@ public class SolidColorAdapter extends RecyclerView.Adapter<SolidColorAdapter.So
     @Override
     public void onBindViewHolder(@NonNull SolidColorViewHolder holder, int position) {
         holder.colorView.setBackgroundColor(solidColorList[position]);
-        holder.colorView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (listener != null) {
-                    listener.onSolidColorSelected(solidColorList[holder.getAdapterPosition()]);
-                }
+        holder.colorView.setOnClickListener(view -> {
+            if (listener != null) {
+                listener.onSolidColorSelected(solidColorList[holder.getAdapterPosition()]);
             }
         });
     }
